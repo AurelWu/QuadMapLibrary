@@ -5,6 +5,7 @@
   "description": "Library which makes working on quadratic grids easier",
   "unity": "2019.1",  
   "dependencies": {
+	"com.wunderwunsch.quadmapLibrary": "https://github.com/AurelWu/QuadMapLibrary.git"
     "com.unity.mathematics": "1.0.1",
     "com.unity.collections": "0.0.9"
  },
