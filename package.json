@@ -1,12 +1,12 @@
 {
   "name": "com.wunderwunsch.quadmaplibrary",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "Quadmap Library",
   "description": "Library which makes working on quadratic grids easier",
   "unity": "2019.1",  
   "dependencies": {
     "com.unity.mathematics": "1.0.1",
-    "com.unity.collections": "0.0.9"
+    "com.unity.collections": "0.0.9-preview.18"
  },
  "keywords": [
     "grid",
