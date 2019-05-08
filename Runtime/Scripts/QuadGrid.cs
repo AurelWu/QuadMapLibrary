@@ -9,17 +9,10 @@ namespace Wunderwunsch.QuadMapLibrary
 { 
     public static partial class QuadGrid
     {
-        public static void TestMethod()
+        public static bool IsVerticalEdge(Vector2Int inputEdge)
         {
-            NativeList<int2> testList = new NativeList<int2>(Allocator.Temp);
-            testList.Add(new int2(3, 5));
-            GetTiles.AdjacentToTile(new int2(3, 5), testList);
-            Debug.Log(testList[0]);
-            Debug.Log(testList[1]);
-            Debug.Log(testList[2]);
-            Debug.Log(testList[3]);
-            Debug.Log(testList[4]);
-            testList.Dispose();
+            if (inputEdge.x % 2 != 0) return true; //x is uneven meaning that the edge is between to tiles on the x-axis with same y-coordinate resulting in a vertical edge
+            else return false;
         }
     }
 }

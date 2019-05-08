@@ -1,6 +1,6 @@
 {
   "name": "com.wunderwunsch.quadmaplibrary",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "displayName": "Quadmap Library",
   "description": "Library which makes working on quadratic grids easier",
   "unity": "2019.1",  
@@ -14,7 +14,7 @@
     "quadgrid"
   ],
   "author": {
-    "name": "Aurel WÃ¼nsch",
+    "name": "Aurel Wünsch",
     "email": "aurelwuensch@gmail.com",
     "url": "https://aurelwu.github.io/"
   } 
