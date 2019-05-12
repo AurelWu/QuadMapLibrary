@@ -7,6 +7,9 @@ using Unity.Collections;
 
 namespace Wunderwunsch.QuadMapLibrary
 { 
+    /// <summary>
+    /// This library assumes for all input values on methods handling finite sized maps that the input is a valid coordinate of that map!
+    /// </summary>
     public static partial class QuadGrid
     {
         public static bool IsVerticalEdge(Vector2Int inputEdge)

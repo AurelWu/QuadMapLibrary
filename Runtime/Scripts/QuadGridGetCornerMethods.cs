@@ -40,6 +40,7 @@ namespace Wunderwunsch.QuadMapLibrary
                 return result;
             }
 
+
             public static void AdjacentToEdge()
             {
                 throw new System.NotImplementedException();
