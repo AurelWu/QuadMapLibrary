@@ -879,7 +879,7 @@ namespace Wunderwunsch.QuadMapLibrary
 
                 else if (slopeX < 0 && slopeY > 0) //top left
                 {
-                    currentDistanceToNextX = startPosition.x - startCoord.y;
+                    currentDistanceToNextX = startPosition.x - startCoord.x;
                     currentDistanceToNextY = (startCoord.y + 1) - startPosition.y;
 
                     //TODO add failsafe
