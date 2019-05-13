@@ -687,11 +687,241 @@ namespace Wunderwunsch.QuadMapLibrary
                 return result;
             }
 
-            public static List<Vector2Int> TraversalLine(Vector2 startPosition, Vector2 targetPosition, bool includeOrigin)
+
+            /// <summary>
+            /// when "continueTilMapBounds is false, you should not pick a start or targetPosition which is right on a gridedge but offset it minimally
+            /// TODO: do the offsetting ourselves
+            /// </summary>                        
+            public static List<Vector2Int> TraversalLine(Vector2 startPosition, Vector2 targetPosition, Vector2Int mapSize, bool includeOrigin, bool continueTilMapBounds)
             {
                 List<Vector2Int> result = new List<Vector2Int>();
+                var startCoord = new Vector2Int((int)startPosition.x, (int)startPosition.y);
+                var targetCoord = new Vector2Int((int)targetPosition.x, (int)targetPosition.y);
+                if (includeOrigin) result.Add(startCoord);
 
-                throw new System.NotImplementedException();
+                float slopeX = targetPosition.x - startPosition.x;
+                float slopeY = targetPosition.y - startPosition.y;
+                Vector2 slope = new Vector2(slopeX, slopeY);
+                slope.Normalize();
+                Debug.Log("slope:" + slope);
+                float currentDistanceToNextX;
+                float currentDistanceToNextY;
+
+                int currentX = startCoord.x;
+                int currentY = startCoord.y;
+
+                if (startCoord.x == targetCoord.x) //vertical line;
+                {
+                    if (slopeY > 0)
+                    {
+                        for (int yCoord = startCoord.y + 1; yCoord < mapSize.y - 1; yCoord++)
+                        {
+                            result.Add(new Vector2Int(startCoord.x, yCoord));
+                        }
+                    }
+                    else
+                    {
+                        for (int yCoord = startCoord.y - 1; yCoord >= 0; yCoord--)
+                        {
+                            result.Add(new Vector2Int(startCoord.x, yCoord));
+                        }
+                    }
+                }
+                else if (startCoord.y == targetCoord.y) //horizontal line
+                {
+                    if (slopeX > 0)
+                    {
+                        for (int xCoord = startCoord.x + 1; xCoord < mapSize.x - 1; xCoord++)
+                        {
+                            result.Add(new Vector2Int(xCoord, startCoord.y));
+                        }
+                    }
+                    else
+                    {
+                        for (int xCoord = startCoord.x - 1; xCoord >= 0; xCoord--)
+                        {
+                            result.Add(new Vector2Int(xCoord, startCoord.y));
+                        }
+                    }
+                }
+
+                else if (slopeX > 0 && slopeY > 0) //top right
+                {
+                    currentDistanceToNextX = (startCoord.x + 1) - startPosition.x;
+                    currentDistanceToNextY = (startCoord.y + 1) - startPosition.y;
+
+                    //TODO add failsafe
+                    int failSafe = 0;
+                    while (true)
+                    {
+                        if (failSafe > 10000)
+                        {
+                            Debug.Log("Failsafe triggered something not working as intended");
+                            break;
+                        }
+
+                        if (!continueTilMapBounds && currentX == targetCoord.x && currentY == targetCoord.y)
+                        {
+                            break;
+                        }
+
+                        failSafe++;
+                        float dist1 = currentDistanceToNextX / slope.x;
+                        float dist2 = currentDistanceToNextY / slope.y;
+                        if (dist1 <= dist2)
+                        {
+                            //we hit new X before hitting new Y
+                            //calculate intersection Point:
+                            currentX++;
+                            if (currentX >= mapSize.x) break;
+                            currentDistanceToNextX = 1;
+                            currentDistanceToNextY -= dist1 * slope.y;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                        else
+                        {
+                            currentY++;
+                            if (currentY >= mapSize.y) break;
+                            currentDistanceToNextY = 1;
+                            currentDistanceToNextX -= dist2 * slope.x;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                    }
+                }
+
+                else if (slopeX > 0 && slopeY < 0) //bottom right
+                {
+                    currentDistanceToNextX = (startCoord.x + 1) - startPosition.x;
+                    currentDistanceToNextY = startPosition.y - startCoord.y;
+
+                    //TODO add failsafe
+                    int failSafe = 0;
+                    while (true)
+                    {
+                        if (failSafe > 10000)
+                        {
+                            Debug.Log("Failsafe triggered something not working as intended");
+                            break;
+                        }
+
+                        if (!continueTilMapBounds && currentX == targetCoord.x && currentY == targetCoord.y)
+                        {
+                            break;
+                        }
+
+                        failSafe++;
+                        float dist1 = currentDistanceToNextX / slope.x;
+                        float dist2 = currentDistanceToNextY / -slope.y;
+                        if (dist1 <= dist2)
+                        {
+                            //we hit new X before hitting new Y
+                            //calculate intersection Point:
+                            currentX++;
+                            if (currentX >= mapSize.x) break;
+                            currentDistanceToNextX = 1;
+                            currentDistanceToNextY -= dist1 * -slope.y;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                        else
+                        {
+                            currentY--;
+                            if (currentY < 0) break;
+                            currentDistanceToNextY = 1;
+                            currentDistanceToNextX -= dist2 * slope.x;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                    }
+                }
+
+                else if (slopeX < 0 && slopeY < 0) //bottom left
+                {
+                    currentDistanceToNextX = startPosition.x - startCoord.x;
+                    currentDistanceToNextY = startPosition.y - startCoord.y;
+
+                    //TODO add failsafe
+                    int failSafe = 0;
+                    while (true)
+                    {
+                        if (failSafe > 10000)
+                        {
+                            Debug.Log("Failsafe triggered something not working as intended");
+                            break;
+                        }
+
+                        if (!continueTilMapBounds && currentX == targetCoord.x && currentY == targetCoord.y)
+                        {
+                            break;
+                        }
+
+                        failSafe++;
+                        float dist1 = currentDistanceToNextX / -slope.x;
+                        float dist2 = currentDistanceToNextY / -slope.y;
+                        if (dist1 <= dist2)
+                        {
+                            //we hit new X before hitting new Y
+                            //calculate intersection Point:
+                            currentX--;
+                            if (currentX < 0) break;
+                            currentDistanceToNextX = 1;
+                            currentDistanceToNextY -= dist1 * -slope.y;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                        else
+                        {
+                            currentY--;
+                            if (currentY < 0) break;
+                            currentDistanceToNextY = 1;
+                            currentDistanceToNextX -= dist2 * -slope.x;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                    }
+                }
+
+                else if (slopeX < 0 && slopeY > 0) //top left
+                {
+                    currentDistanceToNextX = startPosition.x - startCoord.y;
+                    currentDistanceToNextY = (startCoord.y + 1) - startPosition.y;
+
+                    //TODO add failsafe
+                    int failSafe = 0;
+                    while (true)
+                    {
+                        if (failSafe > 10000)
+                        {
+                            Debug.Log("Failsafe triggered something not working as intended");
+                            break;
+                        }
+
+                        if (!continueTilMapBounds && currentX == targetCoord.x && currentY == targetCoord.y)
+                        {
+                            break;
+                        }
+
+                        failSafe++;
+                        float dist1 = currentDistanceToNextX / -slope.x;
+                        float dist2 = currentDistanceToNextY / slope.y;
+                        if (dist1 <= dist2)
+                        {
+                            //we hit new X before hitting new Y
+                            //calculate intersection Point:
+                            currentX--;
+                            if (currentX < 0) break;
+                            currentDistanceToNextX = 1;
+                            currentDistanceToNextY -= dist1 * slope.y;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                        else
+                        {
+                            currentY++;
+                            if (currentY >= mapSize.y) break;
+                            currentDistanceToNextY = 1;
+                            currentDistanceToNextX -= dist2 * -slope.x;
+                            result.Add(new Vector2Int(currentX, currentY));
+                        }
+                    }
+                }
+
+                return result;
             }
         }
     }
