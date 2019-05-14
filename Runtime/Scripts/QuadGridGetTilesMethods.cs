@@ -703,7 +703,7 @@ namespace Wunderwunsch.QuadMapLibrary
                 float slopeY = targetPosition.y - startPosition.y;
                 Vector2 slope = new Vector2(slopeX, slopeY);
                 slope.Normalize();
-                Debug.Log("slope:" + slope);
+                //Debug.Log("slope:" + slope);
                 float currentDistanceToNextX;
                 float currentDistanceToNextY;
 
