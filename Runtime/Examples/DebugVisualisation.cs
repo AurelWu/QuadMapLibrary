@@ -201,7 +201,14 @@ namespace Wunderwunsch.QuadMapLibrary.Examples
             //    instance.transform.position = new Vector3(r.x, .1f, r.y);
             //}
 
-            result = QuadGrid.GetTiles.BresenhamLineSlope(new Vector2Int(8, 5), new Vector2Int(-4, 1), mapSize, true);
+            //result = QuadGrid.GetTiles.BresenhamLineSlope(new Vector2Int(8, 5), new Vector2Int(-4, 1), mapSize, true);
+            //foreach (var r in result)
+            //{
+            //    var instance = GameObject.Instantiate(tileMarker);
+            //    instance.transform.position = new Vector3(r.x, .1f, r.y);
+            //}
+
+            result = QuadGrid.GetTiles.TraversalLine(new Vector2(7.5f,14.5f), new Vector2(4f, 17f), mapSize, true,true);
             foreach (var r in result)
             {
                 var instance = GameObject.Instantiate(tileMarker);

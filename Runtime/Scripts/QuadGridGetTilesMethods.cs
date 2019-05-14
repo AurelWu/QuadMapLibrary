@@ -710,42 +710,42 @@ namespace Wunderwunsch.QuadMapLibrary
                 int currentX = startCoord.x;
                 int currentY = startCoord.y;
 
-                if (startCoord.x == targetCoord.x) //vertical line;
-                {
-                    if (slopeY > 0)
-                    {
-                        for (int yCoord = startCoord.y + 1; yCoord < mapSize.y - 1; yCoord++)
-                        {
-                            result.Add(new Vector2Int(startCoord.x, yCoord));
-                        }
-                    }
-                    else
-                    {
-                        for (int yCoord = startCoord.y - 1; yCoord >= 0; yCoord--)
-                        {
-                            result.Add(new Vector2Int(startCoord.x, yCoord));
-                        }
-                    }
-                }
-                else if (startCoord.y == targetCoord.y) //horizontal line
-                {
-                    if (slopeX > 0)
-                    {
-                        for (int xCoord = startCoord.x + 1; xCoord < mapSize.x - 1; xCoord++)
-                        {
-                            result.Add(new Vector2Int(xCoord, startCoord.y));
-                        }
-                    }
-                    else
-                    {
-                        for (int xCoord = startCoord.x - 1; xCoord >= 0; xCoord--)
-                        {
-                            result.Add(new Vector2Int(xCoord, startCoord.y));
-                        }
-                    }
-                }
+                //if (startCoord.x == targetCoord.x) //vertical line;
+                //{
+                //    if (slopeY > 0)
+                //    {
+                //        for (int yCoord = startCoord.y + 1; yCoord < mapSize.y - 1; yCoord++)
+                //        {
+                //            result.Add(new Vector2Int(startCoord.x, yCoord));
+                //        }
+                //    }
+                //    else
+                //    {
+                //        for (int yCoord = startCoord.y - 1; yCoord >= 0; yCoord--)
+                //        {
+                //            result.Add(new Vector2Int(startCoord.x, yCoord));
+                //        }
+                //    }
+                //}
+                //else if (startCoord.y == targetCoord.y) //horizontal line
+                //{
+                //    if (slopeX > 0)
+                //    {
+                //        for (int xCoord = startCoord.x + 1; xCoord < mapSize.x - 1; xCoord++)
+                //        {
+                //            result.Add(new Vector2Int(xCoord, startCoord.y));
+                //        }
+                //    }
+                //    else
+                //    {
+                //        for (int xCoord = startCoord.x - 1; xCoord >= 0; xCoord--)
+                //        {
+                //            result.Add(new Vector2Int(xCoord, startCoord.y));
+                //        }
+                //    }
+                //}
 
-                else if (slopeX > 0 && slopeY > 0) //top right
+                if (slopeX >= 0 && slopeY >= 0) //top right
                 {
                     currentDistanceToNextX = (startCoord.x + 1) - startPosition.x;
                     currentDistanceToNextY = (startCoord.y + 1) - startPosition.y;
@@ -789,7 +789,7 @@ namespace Wunderwunsch.QuadMapLibrary
                     }
                 }
 
-                else if (slopeX > 0 && slopeY < 0) //bottom right
+                else if (slopeX >= 0 && slopeY <= 0) //bottom right
                 {
                     currentDistanceToNextX = (startCoord.x + 1) - startPosition.x;
                     currentDistanceToNextY = startPosition.y - startCoord.y;
@@ -833,7 +833,7 @@ namespace Wunderwunsch.QuadMapLibrary
                     }
                 }
 
-                else if (slopeX < 0 && slopeY < 0) //bottom left
+                else if (slopeX <= 0 && slopeY <= 0) //bottom left
                 {
                     currentDistanceToNextX = startPosition.x - startCoord.x;
                     currentDistanceToNextY = startPosition.y - startCoord.y;
@@ -877,9 +877,9 @@ namespace Wunderwunsch.QuadMapLibrary
                     }
                 }
 
-                else if (slopeX < 0 && slopeY > 0) //top left
+                else if (slopeX <= 0 && slopeY >= 0) //top left
                 {
-                    currentDistanceToNextX = startPosition.x - startCoord.y;
+                    currentDistanceToNextX = startPosition.x - startCoord.x;
                     currentDistanceToNextY = (startCoord.y + 1) - startPosition.y;
 
                     //TODO add failsafe
