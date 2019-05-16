@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Wunderwunsch.QuadMapLibrary;
+using Unity.Collections;
+using Unity.Mathematics;
 
 namespace Wunderwunsch.QuadMapLibrary.Examples
 {
@@ -16,9 +18,9 @@ namespace Wunderwunsch.QuadMapLibrary.Examples
         // Start is called before the first frame update
         void Start()
         {
-            for(int y = 0; y <mapSize.y; y++)
+            for (int y = 0; y < mapSize.y; y++)
             {
-                for(int x = 0; x < mapSize.x; x++)
+                for (int x = 0; x < mapSize.x; x++)
                 {
                     var instance = GameObject.Instantiate(tilePrefab);
                     instance.transform.position = new Vector3(x, 0, y);
@@ -26,10 +28,10 @@ namespace Wunderwunsch.QuadMapLibrary.Examples
             }
 
             var result = QuadGrid.GetTiles.AdjacentToTile(new Vector2Int(0, mapSize.y / 4), mapSize);
-            foreach(var r in result)
+            foreach (var r in result)
             {
                 var instance = GameObject.Instantiate(tileMarker);
-                instance.transform.position = new Vector3(r.x, .1f, r.y);                
+                instance.transform.position = new Vector3(r.x, .1f, r.y);
             }
             //
             //result = QuadGrid.GetTiles.AdjacentToTile(new Vector2Int(mapSize.x-1, mapSize.y-1), mapSize);
@@ -208,12 +210,23 @@ namespace Wunderwunsch.QuadMapLibrary.Examples
             //    instance.transform.position = new Vector3(r.x, .1f, r.y);
             //}
 
-            result = QuadGrid.GetTiles.TraversalLine(new Vector2(7.5f,14.5f), new Vector2(4f, 17f), mapSize, true,true);
-            foreach (var r in result)
+            //result = QuadGrid.GetTiles.TraversalLine(new Vector2(12.5f, 5.5f), new Vector2(13.99f, 5f), mapSize, true, true);
+            //foreach (var r in result)
+            //{
+            //    var instance = GameObject.Instantiate(tileMarker);
+            //    instance.transform.position = new Vector3(r.x, .1f, r.y);
+            //}
+
+            NativeList<int2> testList = new NativeList<int2>(Allocator.Persistent);
+
+            QuadGrid.GetTiles.TraversalLine(new float2(12.5f, 18.5f), new float2(13.99f, 5f), new int2(mapSize.x, mapSize.y), true, true, testList);
+            for(int i = 0; i < testList.Length; i++)
             {
                 var instance = GameObject.Instantiate(tileMarker);
-                instance.transform.position = new Vector3(r.x, .1f, r.y);
-            }
+                instance.transform.position = new Vector3(testList[i].x, .1f, testList[i].y);
+            }            
+
+            testList.Dispose();
         }
     
         // Update is called once per frame
